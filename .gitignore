@@ -3,3 +3,4 @@ venv
 .vscode
 whitelist.json
 logs
+__pycache__
