@@ -1,6 +1,7 @@
 {
     "name": {
         "path": "absolute/path/to/project/folder",
-        "cmd": "build and run commands"
+        "cmd": "build and run commands",
+        "branch": "branch to track"
     }
 }

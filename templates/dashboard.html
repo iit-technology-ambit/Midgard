@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Midgard Continous Deployment</title>
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+        <!-- Compiled and minified JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script> 
+    </head>
+    <body>
+        <h1 class="fluid-text">IIT Technology Ambit</h1>
+        <a class="btn btn-danger waves waves-effect" href="/logout">Logout</a>
+        <table>
+            {% for name in names.keys() %}
+            <tr>
+                <td>{{ name }}</td>
+                <td><a class="btn btn-success waves waves-effect" href="/build/{{ name }}">Redeploy</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+
+</html>

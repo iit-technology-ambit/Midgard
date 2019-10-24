@@ -2,7 +2,7 @@
 Automated building function
 ------------------------------
 
-All output logs will be redirected to the environment variable: LOG_PATH
+All output logs will be redirected to: $LOG_PATH/repo.log
 """
 import json
 import os
@@ -20,15 +20,16 @@ def buildRepo(name):
         os.mkdir(log_path)
         open(os.path.join(log_path, "pid.json"), "w")
     pids = dict()
-    with open(os.path.join(log_path, "pid.json"), "r") as f:
-        dump = f.read()
-        try:
-            pids = json.loads(dump)
-        except:
-            pass
+
+    proc_list = open(os.path.join(log_path, "pid.json"), "a+")
+    proc_list.seek(0)
+    dump = proc_list.read()
+    try:
+        pids = json.loads(dump)
+    except:
+        pass
         
     if name in whitelist.keys():
-        curr_path = os.getcwd()
         #Kill the existing process
         if name in pids.keys():
             try:
@@ -38,13 +39,13 @@ def buildRepo(name):
          
         #Spawn new process
         log = open(os.path.join(log_path, (name + ".log")), "a")
-        os.chdir(whitelist[name]['path'])
-        os.system("git pull")
-        proc = subprocess.Popen(whitelist[name]['cmd'].split(";"), shell=True, stdout=log)
-        
-        os.chdir(curr_path)
+        subprocess.call([f"cd { whitelist[name]['path'] } && git checkout { whitelist[name]['branch'] } && git pull origin { whitelist[name]['branch'] }"], shell=True)
+        cmd = f"cd { whitelist[name]['path'] } && " + whitelist[name]['cmd']
+        proc = subprocess.Popen([cmd], shell=True, stdout=log, stderr=log)
         pids[name] = proc.pid
-        with open(os.path.join(log_path, "pid.json"), "w") as f:
-            json.dump(pids, f)
+        proc_list.truncate(0)
+        json.dump(pids, proc_list)
+
+        return proc
 
 

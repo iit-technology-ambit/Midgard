@@ -4,16 +4,22 @@ Github webhook listener
 import hashlib
 import hmac
 import os
-from flask import Flask, request, abort
+import pickle
+from flask import Flask, request, abort, session, redirect, url_for, render_template
 from dotenv import load_dotenv
-from builder import buildRepo
+from collections import deque
+import json
 
 load_dotenv("conf.env")
-
+procs = None
 app = Flask(__name__)
 app.config["GITHUB_SECRET_TOKEN"] = os.environ.get("GITHUB_SECRET_TOKEN")
-@app.route("/<repo>", methods=["GET", "POST"])
+app.config["ADMIN_PIN"] = os.environ.get("MIDGARD_ADMIN_PIN")
+app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
+
+@app.route("/github/<repo>", methods=["GET", "POST"])
 def getRequest(repo):
+    global procs
     valid = True
     raw_data = request.get_data()
     try:
@@ -27,11 +33,54 @@ def getRequest(repo):
     except:
         valid = False
     if valid:
-        print("Received valid payload")
-        buildRepo(repo)
+        if procs is not None:
+            procs.put(repo)
+    
         return "Payload processed", 200
     else:
         abort(403)
+
+@app.route("/build/<repo>")
+def directBuildEndpoint(repo):
+    if 'ADMIN_PIN' in session and session['ADMIN_PIN'] == app.config['ADMIN_PIN']:
+        global procs
+        if procs is not None:
+            procs.put(repo)
+        return redirect("/dashboard")
+    else:
+        abort(403)
+
+@app.route("/dashboard")
+def dashHandle():
+    if 'ADMIN_PIN' in session and session['ADMIN_PIN'] == app.config['ADMIN_PIN']:
+        f = open("whitelist.json", "r")
+        names = json.load(f)
+        f.close()
+        return render_template("dashboard.html", names=names)
+    else:
+        return redirect("/")
+
+@app.route("/")
+def landing():
+    if 'ADMIN_PIN' in session and session['ADMIN_PIN'] == app.config['ADMIN_PIN']:
+        return redirect("/dashboard")
+    else:
+        return render_template("login.html")
+
+@app.route("/login", methods=["POST"])
+def login_user():
+    session['ADMIN_PIN'] = request.form['pin']
+    return redirect("/dashboard")
+
+@app.route("/logout")
+def logout_user():
+    session['ADMIN_PIN'] = ""
+    return redirect("/")
+    
+def run_on_proc(proc_q):
+    global procs
+    procs = proc_q
+    app.run(debug=False, port=5918)
 
 if __name__ == "__main__":
     app.run(debug=True)
