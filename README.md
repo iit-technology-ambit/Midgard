@@ -22,6 +22,16 @@ It runs a mini Flask server waiting for Github webhook request (with some `SECRE
 
 Fill out the necessary environment variables given in `conf.env.template` and save as `conf.env`. Similarly, fill up all your required processes in the format given in `whitelist.json.template` and save as `whitelist.json`. 
 
+### Example entry of `whitelist.json`
+
+```json
+"blogger": {
+        "path": "/home/grapheo12/fb",
+        "cmd": "pwd && source venv/bin/activate && python run.py",
+        "branch": "master"
+    }
+```
+
 Remember to always use absolute paths.
 
 Create a new virtual environment by `virtualenv` and install all the dependencies in `requirement.txt`.
