@@ -1,0 +1,6 @@
+venv
+*.env
+.vscode
+whitelist.json
+logs
+__pycache__
