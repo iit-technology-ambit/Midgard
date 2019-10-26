@@ -4,3 +4,4 @@ venv
 whitelist.json
 logs
 __pycache__
+midgard
