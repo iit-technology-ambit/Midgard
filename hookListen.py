@@ -9,6 +9,7 @@ from flask import Flask, request, abort, session, redirect, url_for, render_temp
 from dotenv import load_dotenv
 from collections import deque
 import json
+import subprocess
 
 load_dotenv("conf.env")
 procs = None
@@ -80,7 +81,7 @@ def logout_user():
 def run_on_proc(proc_q):
     global procs
     procs = proc_q
-    app.run(debug=False, port=5918)
+    subprocess.call(["uwsgi --ini midgard.ini"], shell=True)
 
 if __name__ == "__main__":
     app.run(debug=True)
