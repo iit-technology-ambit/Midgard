@@ -19,8 +19,9 @@ if __name__ == "__main__":
 
     with open("whitelist.json", "r") as f:
         names = json.load(f)
-        for name in names.keys() and name != "midgard":
-            running_threads[name] = buildRepo(name)
+        for name in names.keys():
+            if name != "midgard":
+                running_threads[name] = buildRepo(name)
     try:
         signal.signal(signal.SIGINT, signal_handler)
         signal.signal(signal.SIGTERM, signal_handler)
