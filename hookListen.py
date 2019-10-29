@@ -82,8 +82,7 @@ def logout_user():
 def run_on_proc(proc_q, fp):
     global procs
     procs = proc_q
-    with redirect_stdout(fp):
-        app.run(debug=True)
+    subprocess.call(["uwsgi --ini midgard.ini"], shell=True)
 
 if __name__ == "__main__":
     app.run(debug=True)
