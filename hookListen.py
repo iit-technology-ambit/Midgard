@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 from collections import deque
 import json
 import subprocess
+from contextlib import redirect_stdout
 
 load_dotenv("conf.env")
 procs = None
@@ -78,10 +79,11 @@ def logout_user():
     session['ADMIN_PIN'] = ""
     return redirect("/")
     
-def run_on_proc(proc_q):
+def run_on_proc(proc_q, fp):
     global procs
     procs = proc_q
-    subprocess.call(["uwsgi --ini midgard.ini"], shell=True)
+    with redirect_stdout(fp):
+        app.run(debug=True)
 
 if __name__ == "__main__":
     app.run(debug=True)

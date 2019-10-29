@@ -9,6 +9,7 @@ import os
 import signal
 import subprocess
 from dotenv import load_dotenv
+import datetime
 
 def buildRepo(name):
     fp = open("whitelist.json", "r")
@@ -38,8 +39,10 @@ def buildRepo(name):
                 pass
          
         #Spawn new process
+        print(f"[{datetime.datetime.now()}] New process spawned for {name}")
         log = open(os.path.join(log_path, (name + ".log")), "a")
-        subprocess.call([f"cd { whitelist[name]['path'] } && git checkout { whitelist[name]['branch'] } && git pull origin { whitelist[name]['branch'] }"], shell=True)
+        log.write(f"[{datetime.datetime.now()}]")
+        subprocess.call([f"cd { whitelist[name]['path'] } && git checkout { whitelist[name]['branch'] } && git pull"], shell=True, stdout=log, stderr=log)
         cmd = f"cd { whitelist[name]['path'] } && " + whitelist[name]['cmd']
         proc = subprocess.Popen([cmd], shell=True, stdout=log, stderr=log)
         pids[name] = proc.pid
