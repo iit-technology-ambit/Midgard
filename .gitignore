@@ -5,3 +5,4 @@ whitelist.json
 logs
 __pycache__
 midgard
+midgard.sock

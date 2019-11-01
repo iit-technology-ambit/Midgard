@@ -11,6 +11,7 @@ from collections import deque
 import json
 import subprocess
 from contextlib import redirect_stdout
+from cheroot.wsgi import Server as WSGIServer
 
 load_dotenv("conf.env")
 procs = None
@@ -81,8 +82,10 @@ def logout_user():
     
 def run_on_proc(proc_q, fp):
     global procs
+    global app
     procs = proc_q
-    subprocess.call(["uwsgi --ini midgard.ini"], shell=True)
+    server = WSGIServer('midgard.sock', app, numthreads=4)
+    server.start()
 
 if __name__ == "__main__":
     app.run(debug=True)
