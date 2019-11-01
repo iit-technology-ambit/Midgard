@@ -12,6 +12,7 @@ import json
 import subprocess
 from contextlib import redirect_stdout
 from cheroot.wsgi import Server as WSGIServer
+import slackbot
 
 load_dotenv("conf.env")
 procs = None
@@ -79,6 +80,8 @@ def login_user():
 def logout_user():
     session['ADMIN_PIN'] = ""
     return redirect("/")
+
+app.route("/slack/logs/<repo>")(slackbot.build_log_msg)
     
 def run_on_proc(proc_q, fp):
     global procs
