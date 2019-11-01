@@ -38,7 +38,8 @@ if __name__ == "__main__":
             if not procs.empty():
                 new_proc = procs.get(block=True)
                 if new_proc in running_threads.keys():
-                    running_threads[new_proc].terminate()
+                    if new_proc != 'midgard':
+                        running_threads[new_proc].terminate()
                     running_threads[new_proc] = buildRepo(new_proc)
                     
     except KeyboardInterrupt:
