@@ -2,19 +2,32 @@
 <html>
     <head>
         <title>Midgard Continous Deployment</title>
+        <meta name="viewport" content="width=device-width;initial-scale=1.0">
         <!-- Compiled and minified CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
         <!-- Compiled and minified JavaScript -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script> 
     </head>
-    <body class="grey lighten-3">
-        <div class="container blue lighten-1">
-            <form action="/login" method="POST">
+    <body class="grey lighten-3 valign-wrapper">
+        <div class="container blue valign lighten-1">
+            <form action="/login" method="POST" class="row">
                 <input type="text" class="input-field col-s6" name="pin" placeholder="Enter Admin Pin">
                 <input type="submit" class="btn btn-success waves waves-effect " value="Log In" onclick="saveUser()">
             </form>
         </div>
-
+        <style>
+            .container{
+                width:40vw; 
+                height:30vh; 
+                top:35vh; 
+                left: 30vw; 
+                position:absolute;
+                border-radius: 6px;
+                padding-top:30px;
+                padding-left:30px;
+                padding-right: 30px;
+            }
+        </style>
     </body>
 </html>
