@@ -1,4 +1,4 @@
-[Logo](static/square-logo.png)
+![Logo](static/logo-square.png)
 
 # Midgard
 
