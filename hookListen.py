@@ -81,7 +81,10 @@ def logout_user():
     session['ADMIN_PIN'] = ""
     return redirect("/")
 
-app.route("/slack/logs/<repo>")(slackbot.build_log_msg)
+app.route("/slack/logs", methods=["POST"])
+def show_logs():
+    return slackbot.build_log_msg(request.form['text'])
+
     
 def run_on_proc(proc_q, fp):
     global procs
