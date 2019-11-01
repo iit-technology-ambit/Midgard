@@ -5,6 +5,9 @@ Slack URL is in $SLACK_URL
 import requests
 import os
 import time
+import dotenv
+
+dotenv.load_dotenv('conf.env')
 
 URL = os.getenv('SLACK_URL')
 
