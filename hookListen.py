@@ -84,7 +84,7 @@ def run_on_proc(proc_q, fp):
     global procs
     global app
     procs = proc_q
-    server = WSGIServer('midgard.sock', app, numthreads=4)
+    server = WSGIServer(('127.0.0.2', 5918), app, numthreads=4)
     server.start()
 
 if __name__ == "__main__":
