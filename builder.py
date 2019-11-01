@@ -10,6 +10,7 @@ import signal
 import subprocess
 from dotenv import load_dotenv
 import datetime
+import slackbot
 
 def buildRepo(name):
     fp = open("whitelist.json", "r")
@@ -40,6 +41,8 @@ def buildRepo(name):
          
         #Spawn new process
         print(f"[{datetime.datetime.now()}] New process spawned for {name}")
+        slackbot.new_spawn_msg(name)
+        
         log = open(os.path.join(log_path, (name + ".log")), "a")
         log.write(f"[{datetime.datetime.now()}]")
         subprocess.call([f"cd { whitelist[name]['path'] } && /usr/bin/git checkout { whitelist[name]['branch'] } && /usr/bin/git pull"], shell=True, stdout=log, stderr=log)
