@@ -24,4 +24,4 @@ def build_log_msg(repo):
     try:
         return '```\n' + open(os.path.join(os.getenv("LOG_PATH"), repo + '.log'), 'r').read() + '```', 200
     except:
-        return "Repo not found"
+        return "Repo not found", 200

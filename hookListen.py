@@ -81,7 +81,7 @@ def logout_user():
     session['ADMIN_PIN'] = ""
     return redirect("/")
 
-app.route("/slack/logs", methods=["POST"])
+@app.route("/slack/logs", methods=["POST"])
 def show_logs():
     return slackbot.build_log_msg(request.form['text'])
 
